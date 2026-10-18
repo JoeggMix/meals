@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="三餐名單">
+<meta name="apple-mobile-web-app-title" content="三餐在外好食用">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
-<title>三餐口袋名單</title>
+<title>三餐在外好食用</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
@@ -98,7 +98,7 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 <body>
 <div class="wrap">
 <header>
-  <h1>三餐口袋名單</h1>
+  <h1>三餐在外好食用</h1>
   <p>三餐 Loop 與三餐稍貴，共 <span id="total"></span> 家。依你選的時間判斷營業狀態，依起點算直線距離。</p>
 </header>
 <section class="controls" aria-label="篩選">
@@ -121,8 +121,9 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 <div class="summary" id="summary"></div>
 <main class="list" id="list"></main>
 <details class="ver" id="ver">
-  <summary>版本紀錄（目前 v1.2.1）</summary>
+  <summary>版本紀錄（目前 v1.2.2）</summary>
   <dl>
+    <dt>v1.2.2・2026-10-18</dt><dd>網站標題改為「三餐在外好食用」。</dd>
     <dt>v1.2.1・2026-10-18</dt><dd>搬到獨立的 GitHub 專案 meals，網址改為 joeggmix.github.io/meals/。功能沒有變動。</dd>
     <dt>v1.2.0・2026-10-18</dt><dd>卡片可以勾選；勾選後按「分享」，把店名、價位和 Google 地圖網址一次傳給別人。改放到 GitHub 網站，iPhone 可以使用 GPS。</dd>
     <dt>v1.1.0・2026-10-18</dt><dd>起點新增「我的目前位置（手機 GPS）」與「漢神百貨（成功一路本館）」。</dd>
@@ -224,11 +225,11 @@ function loadPicks(){try{const v=JSON.parse(localStorage.getItem("mealpicks")||"
 function bar(){const n=picked.size;$("#pickbar").hidden=n===0;$("#pickn").textContent=n;document.body.classList.toggle("hasbar",n>0)}
 function shareText(){
   const list=DATA.filter(p=>picked.has(p.url));
-  return "三餐口袋名單・挑了 "+list.length+" 家\n\n"+list.map((p,i)=>(i+1)+". "+p.name+"\n"+p.price+"\n"+p.url).join("\n\n");
+  return "三餐在外好食用・挑了 "+list.length+" 家\n\n"+list.map((p,i)=>(i+1)+". "+p.name+"\n"+p.price+"\n"+p.url).join("\n\n");
 }
 async function share(){
   const text=shareText();
-  if(navigator.share){try{await navigator.share({title:"三餐口袋名單",text});return}catch(e){if(e&&e.name==="AbortError")return}}
+  if(navigator.share){try{await navigator.share({title:"三餐在外好食用",text});return}catch(e){if(e&&e.name==="AbortError")return}}
   openBox(text);
 }
 function openBox(text){$("#sharetext").value=text;$("#sharebox").hidden=false;$("#copymsg").textContent="";$("#sharetext").focus();$("#sharetext").select()}
