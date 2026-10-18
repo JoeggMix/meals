@@ -128,8 +128,9 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 <div class="summary" id="summary"></div>
 <main class="list" id="list"></main>
 <details class="ver" id="ver">
-  <summary>版本紀錄（目前 v1.4.0）</summary>
+  <summary>版本紀錄（目前 v1.4.1）</summary>
   <dl>
+    <dt>v1.4.1・2026-10-18</dt><dd>定位被拒時的說明加入電腦版的開啟方式。</dd>
     <dt>v1.4.0・2026-10-18</dt><dd>名單按鈕改為「全部／平價／稍貴／我自己」；時段按鈕改為「不限／早午餐／午晚餐／依設定時間」，預設「不限」；移除起點選單，一律以目前 GPS 位置計算距離。</dd>
     <dt>v1.3.0・2026-10-18</dt><dd>勾選列新增「複製文字」：一鍵複製分享文字，可手動貼到 LINE 或其他地方，電腦和手機都能用。</dd>
     <dt>v1.2.4・2026-10-18</dt><dd>分享文字改為「這次變出這幾家」開頭，每家列店名、吃什麼、Google 地圖網址（不再列價位）。</dd>
@@ -266,7 +267,7 @@ function locate(){
   if(!window.isSecureContext){gpsMsg("定位需要用 https 網址開啟這個頁面；直接開檔案時無法定位。",true);return}
   gpsMsg("定位中…");
   navigator.geolocation.getCurrentPosition(pos=>{gpsPos=[pos.coords.latitude,pos.coords.longitude];const acc=Math.round(pos.coords.accuracy);gpsMsg("已定位（誤差約 "+acc+" 公尺）");render()},err=>{
-    const t=err.code===1?"沒有取得定位權限。iPhone 請到「設定 > 隱私權與安全性 > 定位服務 > Safari 網站」改為「使用 App 期間」，再按「重新定位」。":err.code===3?"定位逾時，請到戶外或稍後按「重新定位」。":"目前無法取得位置（這個頁面可能在不允許定位的環境中開啟），請改選固定起點。";
+    const t=err.code===1?"沒有取得定位權限。手機（iPhone）：到「設定 > 隱私權與安全性 > 定位服務 > Safari 網站」改為「使用 App 期間」；電腦：點網址列左邊的圖示，把「位置」改為允許。改好後按「重新定位」。":err.code===3?"定位逾時，請到戶外或稍後按「重新定位」。":"目前無法取得位置（這個頁面可能在不允許定位的環境中開啟），請改選固定起點。";
     gpsMsg(t,true);render()},{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
 }
 init();
