@@ -123,8 +123,9 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 <div class="summary" id="summary"></div>
 <main class="list" id="list"></main>
 <details class="ver" id="ver">
-  <summary>版本紀錄（目前 v1.2.3）</summary>
+  <summary>版本紀錄（目前 v1.2.4）</summary>
   <dl>
+    <dt>v1.2.4・2026-10-18</dt><dd>分享文字改為「這次變出這幾家」開頭，每家列店名、吃什麼、Google 地圖網址（不再列價位）。</dd>
     <dt>v1.2.3・2026-10-18</dt><dd>標題置中，改用粗黑體。</dd>
     <dt>v1.2.2・2026-10-18</dt><dd>網站標題改為「三餐在外好食用」。</dd>
     <dt>v1.2.1・2026-10-18</dt><dd>搬到獨立的 GitHub 專案 meals，網址改為 joeggmix.github.io/meals/。功能沒有變動。</dd>
@@ -228,7 +229,7 @@ function loadPicks(){try{const v=JSON.parse(localStorage.getItem("mealpicks")||"
 function bar(){const n=picked.size;$("#pickbar").hidden=n===0;$("#pickn").textContent=n;document.body.classList.toggle("hasbar",n>0)}
 function shareText(){
   const list=DATA.filter(p=>picked.has(p.url));
-  return "三餐在外好食用・挑了 "+list.length+" 家\n\n"+list.map((p,i)=>(i+1)+". "+p.name+"\n"+p.price+"\n"+p.url).join("\n\n");
+  return "這次變出這幾家\n\n"+list.map((p,i)=>(i+1)+". "+p.name+"\n"+p.food+"\n"+p.url).join("\n\n");
 }
 async function share(){
   const text=shareText();
