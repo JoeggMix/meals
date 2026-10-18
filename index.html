@@ -9,7 +9,7 @@
 <title>三餐在外好食用</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
 <style>
 /* Layout: 一條控制列（時段、價位、起點、時間）＋依「營業中→距離」排序的店家清單，桌機兩欄、手機一欄 */
 :root{
@@ -17,6 +17,7 @@
   --accent:#1f5f8b; --accent-soft:#e3eef6; --gold:#9a6a00; --gold-soft:#f6edd6;
   --ok:#1f7a45; --ok-soft:#e1f2e7; --warn:#a35a00; --warn-soft:#fbecd8; --off:#7b827e; --off-soft:#eceeec;
   --f-display:"LXGW WenKai TC","Noto Serif TC",serif;
+  --f-title:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
@@ -36,7 +37,8 @@ body{margin:0}
 select,input[type=time]{font-size:16px}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
 .wrap{max-width:1080px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
-header h1{font-family:var(--f-display);font-size:2rem;line-height:1.2;margin:0;text-wrap:balance}
+header{text-align:center}
+header h1{font-family:var(--f-title);font-weight:900;font-size:2.1rem;line-height:1.25;letter-spacing:.04em;margin:0;text-wrap:balance}
 header p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
 .controls{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .ctl{display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -121,8 +123,9 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 <div class="summary" id="summary"></div>
 <main class="list" id="list"></main>
 <details class="ver" id="ver">
-  <summary>版本紀錄（目前 v1.2.2）</summary>
+  <summary>版本紀錄（目前 v1.2.3）</summary>
   <dl>
+    <dt>v1.2.3・2026-10-18</dt><dd>標題置中，改用粗黑體。</dd>
     <dt>v1.2.2・2026-10-18</dt><dd>網站標題改為「三餐在外好食用」。</dd>
     <dt>v1.2.1・2026-10-18</dt><dd>搬到獨立的 GitHub 專案 meals，網址改為 joeggmix.github.io/meals/。功能沒有變動。</dd>
     <dt>v1.2.0・2026-10-18</dt><dd>卡片可以勾選；勾選後按「分享」，把店名、價位和 Google 地圖網址一次傳給別人。改放到 GitHub 網站，iPhone 可以使用 GPS。</dd>
