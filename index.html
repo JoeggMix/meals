@@ -119,17 +119,18 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
     <button type="button" data-v="brunch" aria-pressed="false">早午餐</button>
     <button type="button" data-v="meal" aria-pressed="false">午晚餐</button>
     <button type="button" data-v="auto" aria-pressed="false">依設定時間</button></div></div>
-  <div class="ctl"><span>距離（以目前 GPS 位置計算）</span>
-    <div class="gps"><span id="gpsmsg" class="note" hidden></span><button type="button" id="relocate">重新定位</button></div></div>
   <div class="ctl"><span>時間</span>
     <div class="timerow"><select id="day" aria-label="星期"></select><input type="time" id="time" aria-label="時間"><button type="button" id="now">回到現在</button></div>
     <label class="check"><input type="checkbox" id="openOnly" checked> 只顯示這個時間有營業的</label></div>
+  <div class="ctl"><span>距離（以目前 GPS 位置計算）</span>
+    <div class="gps"><span id="gpsmsg" class="note" hidden></span><button type="button" id="relocate">重新定位</button></div></div>
 </section>
 <div class="summary" id="summary"></div>
 <main class="list" id="list"></main>
 <details class="ver" id="ver">
-  <summary>版本紀錄（目前 v1.4.1）</summary>
+  <summary>版本紀錄（目前 v1.4.2）</summary>
   <dl>
+    <dt>v1.4.2・2026-10-18</dt><dd>「時間」區塊移到「距離」前面。</dd>
     <dt>v1.4.1・2026-10-18</dt><dd>定位被拒時的說明加入電腦版的開啟方式。</dd>
     <dt>v1.4.0・2026-10-18</dt><dd>名單按鈕改為「全部／平價／稍貴／我自己」；時段按鈕改為「不限／早午餐／午晚餐／依設定時間」，預設「不限」；移除起點選單，一律以目前 GPS 位置計算距離。</dd>
     <dt>v1.3.0・2026-10-18</dt><dd>勾選列新增「複製文字」：一鍵複製分享文字，可手動貼到 LINE 或其他地方，電腦和手機都能用。</dd>
