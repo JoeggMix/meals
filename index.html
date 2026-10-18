@@ -95,6 +95,11 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 .ver{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:.88rem}
 .ver summary{cursor:pointer;color:var(--muted);font-weight:500}
 .ver dl{margin:10px 0 0;display:grid;gap:4px 0}.ver dt{font-weight:700;font-variant-numeric:tabular-nums}.ver dd{margin:0 0 8px;color:var(--muted)}
+.ghost.strong{color:var(--accent);border-color:var(--accent);font-weight:500}
+.pickin{flex-wrap:wrap}
+@media (max-width:440px){.pickin>span{flex-basis:100%}.pickin button{flex:1;padding:8px 10px}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:25;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.92rem;max-width:calc(100% - 32px);text-align:center;box-shadow:0 4px 16px color-mix(in srgb,var(--ink) 25%,transparent)}
+@media (max-width:440px){.toast{bottom:calc(124px + env(safe-area-inset-bottom,0px))}}
 </style>
 </head>
 <body>
@@ -123,8 +128,9 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 <div class="summary" id="summary"></div>
 <main class="list" id="list"></main>
 <details class="ver" id="ver">
-  <summary>版本紀錄（目前 v1.2.4）</summary>
+  <summary>版本紀錄（目前 v1.3.0）</summary>
   <dl>
+    <dt>v1.3.0・2026-10-18</dt><dd>勾選列新增「複製文字」：一鍵複製分享文字，可手動貼到 LINE 或其他地方，電腦和手機都能用。</dd>
     <dt>v1.2.4・2026-10-18</dt><dd>分享文字改為「這次變出這幾家」開頭，每家列店名、吃什麼、Google 地圖網址（不再列價位）。</dd>
     <dt>v1.2.3・2026-10-18</dt><dd>標題置中，改用粗黑體。</dd>
     <dt>v1.2.2・2026-10-18</dt><dd>網站標題改為「三餐在外好食用」。</dd>
@@ -136,8 +142,9 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 </details>
 <p class="note">營業時間、價位整理自 Google 地圖（2026 年 10 月），店家可能臨時公休或調整；距離為直線距離，步行時間以每分鐘 75 公尺、路線係數 1.25 粗估。</p>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="pickbar" id="pickbar" hidden>
-  <div class="pickin"><span>已選 <strong id="pickn">0</strong> 家</span><button type="button" id="clearPick" class="ghost">全部取消</button><button type="button" id="share" class="primary">分享</button></div>
+  <div class="pickin"><span>已選 <strong id="pickn">0</strong> 家</span><button type="button" id="clearPick" class="ghost">全部取消</button><button type="button" id="copyPick" class="ghost strong">複製文字</button><button type="button" id="share" class="primary">分享</button></div>
 </div>
 <div class="sharebox" id="sharebox" hidden role="dialog" aria-label="分享內容">
   <div class="sharein">
@@ -219,6 +226,7 @@ function init(){
   loadPicks();
   $("#clearPick").addEventListener("click",()=>{picked.clear();savePicks();render();bar()});
   $("#share").addEventListener("click",share);
+  $("#copyPick").addEventListener("click",copyPick);
   $("#copy").addEventListener("click",copyText);
   $("#closeShare").addEventListener("click",()=>{$("#sharebox").hidden=true});
   render();bar();
@@ -236,8 +244,25 @@ async function share(){
   if(navigator.share){try{await navigator.share({title:"三餐在外好食用",text});return}catch(e){if(e&&e.name==="AbortError")return}}
   openBox(text);
 }
+function legacyCopy(text){
+  const t=document.createElement("textarea");t.value=text;t.setAttribute("readonly","");
+  t.style.position="fixed";t.style.top="0";t.style.left="0";t.style.opacity="0";t.style.fontSize="16px";
+  document.body.appendChild(t);t.focus();t.select();t.setSelectionRange(0,text.length);
+  let ok=false;try{ok=document.execCommand("copy")}catch(e){}
+  t.remove();return ok;
+}
+let toastTimer=null;
+function toast(msg){const el=$("#toast");el.textContent=msg;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.hidden=true},2600)}
+async function copyPick(){
+  const text=shareText(),n=picked.size;
+  let ok=false;
+  if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(text);ok=true}catch(e){}}
+  if(!ok)ok=legacyCopy(text);
+  if(ok)toast("已複製 "+n+" 家，到 LINE 或其他地方貼上即可");
+  else{openBox(text);$("#copymsg").textContent="無法自動複製，請選取上面的文字手動複製。"}
+}
 function openBox(text){$("#sharetext").value=text;$("#sharebox").hidden=false;$("#copymsg").textContent="";$("#sharetext").focus();$("#sharetext").select()}
-async function copyText(){const t=$("#sharetext");try{await navigator.clipboard.writeText(t.value);$("#copymsg").textContent="已複製，可以貼到 LINE 或訊息。"}catch(e){t.focus();t.select();$("#copymsg").textContent="請長按文字選「拷貝」。"}}
+async function copyText(){const t=$("#sharetext");let ok=false;if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(t.value);ok=true}catch(e){}}if(!ok)ok=legacyCopy(t.value);if(ok)$("#copymsg").textContent="已複製，可以貼到 LINE 或訊息。";else{t.focus();t.select();$("#copymsg").textContent="請按 Ctrl+C（手機長按文字選「拷貝」）。"}}
 function gpsMsg(t,bad){const m=$("#gpsmsg");m.textContent=t;m.hidden=!t;m.classList.toggle("bad",!!bad);$("#relocate").hidden=st.origin!==GPS}
 function locate(){
   if(!("geolocation" in navigator)){gpsMsg("這個瀏覽器不支援定位，請改選固定起點。",true);return}
