@@ -128,8 +128,9 @@ body.hasbar .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 <div class="summary" id="summary"></div>
 <main class="list" id="list"></main>
 <details class="ver" id="ver">
-  <summary>版本紀錄（目前 v1.4.2）</summary>
+  <summary>版本紀錄（目前 v1.4.3）</summary>
   <dl>
+    <dt>v1.4.3・2026-10-20</dt><dd>沒有營業時間資料的店（九品香素食苓雅店）勾選「只顯示有營業的」時不再被隱藏，排在營業中的店後面，並標示「營業時間未提供，請先確認」。</dd>
     <dt>v1.4.2・2026-10-18</dt><dd>「時間」區塊移到「距離」前面。</dd>
     <dt>v1.4.1・2026-10-18</dt><dd>定位被拒時的說明加入電腦版的開啟方式。</dd>
     <dt>v1.4.0・2026-10-18</dt><dd>名單按鈕改為「全部／平價／稍貴／我自己」；時段按鈕改為「不限／早午餐／午晚餐／依設定時間」，預設「不限」；移除起點選單，一律以目前 GPS 位置計算距離。</dd>
@@ -167,7 +168,7 @@ function taipeiNow(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tai
 function setNow(){const n=taipeiNow();st.day=n.day;st.min=n.min;$("#day").value=n.day;$("#time").value=fmt(n.min)}
 function fmt(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
 function status(p){
-  if(!p.hours)return{k:"off",t:"營業時間未提供",open:null};
+  if(!p.hours)return{k:"off",t:"營業時間未提供，請先確認",open:null};
   const d=st.day,m=st.min,y=(d+6)%7;
   for(const [a,b] of p.hours[y]){if(b>1440&&m<b-1440){return b-1440-m<=30?{k:"soon",t:"即將打烊 "+fmt(b),open:true}:{k:"open",t:"營業中，到 "+fmt(b),open:true}}}
   for(const [a,b] of p.hours[d]){if(m>=a&&m<b){return b-m<=30?{k:"soon",t:"即將打烊 "+fmt(b),open:true}:{k:"open",t:"營業中，到 "+fmt(b),open:true}}}
@@ -183,8 +184,8 @@ function render(){
   let rows=DATA.filter(p=>(st.group!=="self"||p.self)&&p.tags.some(t=>{const[g,m]=t.split(":");return(st.group==="all"||st.group==="self"||g===st.group)&&(mf==="all"||m===mf)}))
     .map(p=>({p,s:status(p),d:dist(p)}));
   const totalMatch=rows.length;
-  if(st.openOnly)rows=rows.filter(r=>r.s.open);
-  rows.sort((a,b)=>((b.s.open?1:0)-(a.s.open?1:0))||((a.d??0)-(b.d??0)));
+  if(st.openOnly)rows=rows.filter(r=>r.s.open!==false);
+  const rk=s=>s.open===true?2:s.open===null?1:0;rows.sort((a,b)=>(rk(b.s)-rk(a.s))||((a.d??0)-(b.d??0)));
   const mLabel={brunch:"早午餐",meal:"午晚餐",all:"不限時段"}[mf];
   $("#summary").innerHTML=`<span>星期${DN[st.day]} ${fmt(st.min)}・${mLabel}${st.meal==="auto"?"（依設定時間）":""}</span><span><strong>${rows.length}</strong> 家${st.openOnly?"營業中":"符合"}（此條件共 ${totalMatch} 家）</span><span>${originPt()?"從你目前的位置由近到遠":"尚未取得位置，暫不排距離"}</span>`;
   const L=$("#list");L.textContent="";
